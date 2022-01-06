@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.com.pubfuture.enums.TipoReceita;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +31,7 @@ public class Receita {
 	private String descricao;
 	
 	@ManyToOne
+	@JsonBackReference
 	private Conta conta;
 	
 	@Enumerated(EnumType.STRING)

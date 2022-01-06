@@ -43,4 +43,5 @@ public class ReceitaDTO {
 		receita.setDescricao(this.descricao);
 		return receita;
 	}
+	
 }

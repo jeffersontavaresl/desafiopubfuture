@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import br.com.pubfuture.enums.TipoConta;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,9 +33,11 @@ public class Conta {
 	private String instituicaoFinanceira;
 	
 	@OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<Receita> receita;
 	
 	@OneToMany(mappedBy = "conta", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private List<Despesa> despesa;
 	
 	public Conta(String instituicaoFinanceira, Double saldo, TipoConta tipoConta) {

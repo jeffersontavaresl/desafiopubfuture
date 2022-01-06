@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import br.com.pubfuture.enums.TipoDespesa;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +34,7 @@ public class Despesa {
 	private TipoDespesa tipoDespesa;
 	
 	@ManyToOne
+	@JsonBackReference
 	private Conta conta;
 	
 	public Despesa(Double valor, LocalDate dataPagamento, LocalDate dataPagamentoEsperado, 

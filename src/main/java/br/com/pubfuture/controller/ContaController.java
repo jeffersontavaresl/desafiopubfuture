@@ -8,8 +8,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +35,7 @@ public class ContaController {
 	private ContaRepository repository;
 	
 	@GetMapping
-	public Page<ContaDTO> listaDeContas(@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
+	public Page<ContaDTO> listaDeContas(Pageable paginacao) {
 		Page<Conta> contas = repository.findAll(paginacao);
 		return ContaDTO.converter(contas);
 	}
@@ -54,7 +52,8 @@ public class ContaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ContaDTO> cadastrarConta(@RequestBody @Valid ContaForm form, UriComponentsBuilder uriBuilder){
+	public ResponseEntity<ContaDTO> cadastrarConta(@RequestBody @Valid ContaForm form, 
+			UriComponentsBuilder uriBuilder){
 		Conta conta = form.converter();
 		repository.save(conta);
 		
@@ -63,7 +62,8 @@ public class ContaController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ContaDTO> editarConta(@PathVariable Long id, @RequestBody @Valid EditarContaForm form){
+	public ResponseEntity<ContaDTO> editarConta(@PathVariable Long id, 
+			@RequestBody @Valid EditarContaForm form){
 		Optional<Conta> optional = repository.findById(id);
 		
 		if(optional.isPresent()) {
