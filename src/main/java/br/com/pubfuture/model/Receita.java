@@ -21,17 +21,6 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Receita {
 
-	public Receita(Double valor, LocalDate dataRecebimento, 
-			LocalDate dataRecebimentoEsperado, String descricao,
-			TipoReceita tipoReceita, Conta conta) {
-		this.valor = valor;
-		this.dataRecebimento = dataRecebimento;
-		this.dataRecebimentoEsperado = dataRecebimentoEsperado;
-		this.descricao = descricao;
-		this.tipoReceita = tipoReceita;
-		this.conta = conta;
-	}
-
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Double valor;
@@ -44,4 +33,15 @@ public class Receita {
 	
 	@Enumerated(EnumType.STRING)
 	private TipoReceita tipoReceita;
+	
+	public Receita(Double valor, LocalDate dataRecebimento, 
+			LocalDate dataRecebimentoEsperado, String descricao,
+			TipoReceita tipoReceita, Conta conta) {
+		this.valor = valor;
+		this.dataRecebimento = dataRecebimento;
+		this.dataRecebimentoEsperado = dataRecebimentoEsperado;
+		this.descricao = descricao;
+		this.tipoReceita = tipoReceita;
+		this.conta = conta;
+	}
 }

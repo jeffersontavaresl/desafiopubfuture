@@ -37,7 +37,7 @@ public class ReceitaDTO {
 	public Receita atualizar(Long id, ReceitaRepository receitaRepository) {
 		Receita receita = receitaRepository.findById(id).get();
 		receita.setValor(this.valor);
-		receita.setDataRecebimento(this.getDataRecebimento());
+		receita.setDataRecebimento(this.dataRecebimento);
 		receita.setDataRecebimentoEsperado(this.dataRecebimentoEsperado);
 		receita.setTipoReceita(this.tipoReceita);
 		receita.setDescricao(this.descricao);

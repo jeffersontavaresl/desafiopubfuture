@@ -8,8 +8,6 @@ import org.springframework.data.domain.Page;
 
 import br.com.pubfuture.enums.TipoConta;
 import br.com.pubfuture.model.Conta;
-import br.com.pubfuture.model.Despesa;
-import br.com.pubfuture.model.Receita;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,8 +31,6 @@ public class DetalhesContaDTO {
 		this.receitas.addAll(conta.getReceita().stream().map(ReceitaDTO::new).collect(Collectors.toList()));
 		this.despesas.addAll(conta.getDespesa().stream().map(DespesaDTO::new).collect(Collectors.toList()));
 	}
-	
-	
 	
 	public static Page<ContaDTO> converter(Page<Conta> conta){
 		return conta.map(ContaDTO::new);

@@ -34,4 +34,14 @@ public class Despesa {
 	@ManyToOne
 	private Conta conta;
 	
+	public Despesa(Double valor, LocalDate dataPagamento, LocalDate dataPagamentoEsperado, 
+			String descricao, TipoDespesa tipoDespesa, Conta conta) {
+		this.valor = valor;
+		this.dataPagamento = dataPagamento;
+		this.dataPagamentoEsperado = dataPagamentoEsperado;
+		this.descricao = descricao;
+		this.tipoDespesa = tipoDespesa;
+		this.conta = conta;
+	}
+	
 }

@@ -28,7 +28,7 @@ import br.com.pubfuture.repository.ContaRepository;
 import br.com.pubfuture.repository.ReceitaRepository;
 
 @RestController
-@RequestMapping("receita")
+@RequestMapping("receitas")
 public class ReceitaController {
 
 	@Autowired
@@ -58,12 +58,12 @@ public class ReceitaController {
 		Receita receita = form.converter(contaRepository);
 		receitaRepository.save(receita);
 		
-		URI uri = uriBuilder.path("/receita/{id}").buildAndExpand(receita.getId()).toUri();
+		URI uri = uriBuilder.path("/receitas/{id}").buildAndExpand(receita.getId()).toUri();
 		return ResponseEntity.created(uri).body(new ReceitaDTO(receita));
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ReceitaDTO> atualizarReceita(@PathVariable Long id, @RequestBody @Valid ReceitaDTO form){
+	public ResponseEntity<ReceitaDTO> atualizarReceita(@PathVariable Long id, @RequestBody @Valid ReceitaForm form){
 		Optional<Receita> optional = receitaRepository.findById(id);
 		
 		if(optional.isPresent()) {

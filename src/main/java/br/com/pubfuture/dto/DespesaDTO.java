@@ -32,4 +32,5 @@ public class DespesaDTO {
 	public static Page<DespesaDTO> converter(Page<Despesa> despesa){
 		return despesa.map(DespesaDTO::new);
 	}
+	
 }
