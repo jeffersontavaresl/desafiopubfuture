@@ -65,12 +65,26 @@ public class ReceitaController {
 		return receita;
 	}
 	
+	@GetMapping("/tipo/{tipoReceita}")
+	public List<Receita> filtroPorTipoReceita (@PathVariable String tipoReceita){
+		tipoReceita = tipoReceita.toUpperCase();
+		TipoReceita tipo = TipoReceita.valueOf(tipoReceita);
+		List<Receita> receita = receitaRepository.findByTipoReceita(tipo);
+		return receita;
+	}
+	
 	@GetMapping("{contaId}/{tipoReceita}")
-	public List<Receita> filtroPorTipo(@PathVariable Long contaId, @PathVariable String tipoReceita){
+	public List<Receita> filtroPorContaTipoReceita(@PathVariable Long contaId, @PathVariable String tipoReceita){
 		tipoReceita = tipoReceita.toUpperCase();
 		TipoReceita tipo = TipoReceita.valueOf(tipoReceita);
 		List<Receita> receita = receitaRepository.findByContaIdAndTipoReceita(contaId, tipo);
 		return receita;
+	}
+	
+	@GetMapping("/valorTotalReceitas")
+	public Double valorTotalReceitas() {
+		Double detalhes = receitaRepository.findValorTotalReceita();
+		return detalhes;
 	}
 	
 	@PostMapping

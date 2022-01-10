@@ -66,11 +66,25 @@ public class DespesaController {
 	}
 	
 	@GetMapping("{contaId}/{tipoDespesa}")
-	public List<Despesa> filtroPorTipo(@PathVariable Long contaId, @PathVariable String tipoDespesa){
+	public List<Despesa> filtroPorContaTipoDespesa(@PathVariable Long contaId, @PathVariable String tipoDespesa){
 		tipoDespesa = tipoDespesa.toUpperCase();
 		TipoDespesa tipo = TipoDespesa.valueOf(tipoDespesa);
 		List<Despesa> despesa = despesaRepository.findByContaIdAndTipoDespesa(contaId, tipo);
 		return despesa;
+	}
+	
+	@GetMapping("/tipo/{tipoDespesa}")
+	public List<Despesa> filtroPorTipoDespesa(@PathVariable String tipoDespesa){
+		tipoDespesa = tipoDespesa.toUpperCase();
+		TipoDespesa tipo = TipoDespesa.valueOf(tipoDespesa);
+		List<Despesa> despesa = despesaRepository.findByTipoDespesa(tipo);
+		return despesa;
+	}
+	
+	@GetMapping("/valorTotalDespesas")
+	public Double valorTotalDespesas() {
+		Double detalhes = despesaRepository.findValorTotalDespesa();
+		return detalhes;
 	}
 	
 	@PostMapping
