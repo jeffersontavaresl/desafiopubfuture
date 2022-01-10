@@ -51,6 +51,22 @@ public class ContaController {
 		}
 	}
 	
+	@GetMapping("{contaOrigem}/{contaDestino}/{valorTransferencia}")
+	public ResponseEntity<ContaDTO> transferenciaEntreContas(@PathVariable Long contaOrigem, Long contaDestino, Double valor){
+		Conta contaO = repository.findById(contaOrigem).get();
+		Conta contaD = repository.findById(contaDestino).get();
+		
+		if(contaO.getSaldo() > 0) {
+			contaD.setSaldo(contaD.getSaldo() + valor);
+			contaO.setSaldo(contaO.getSaldo() - valor);
+		repository.save(contaO);
+		repository.save(contaD);
+			return ResponseEntity.ok(new ContaDTO(contaO));
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
 	@PostMapping
 	public ResponseEntity<ContaDTO> cadastrarConta(@RequestBody @Valid ContaForm form, 
 			UriComponentsBuilder uriBuilder){
