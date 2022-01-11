@@ -34,6 +34,10 @@ public class ReceitaService {
 	@Autowired
     private ModelMapper modelMapper;
 
+	/** Método para listar todas as receitas cadastradas
+	 * 
+	 * @return lista com todas as despesas
+	 */
 	public List<ReceitaDTO> lista() {
 		List<Receita> receita = receitaRepository.findAll();
 		return receita
@@ -42,6 +46,11 @@ public class ReceitaService {
 				.collect(Collectors.toList());
 	}
 
+	/** Método para detalhar informações de derterminada receita
+	 * 
+	 * @param id
+	 * @return detalhes da receita informada
+	 */
 	public ResponseEntity<ReceitaDTO> detalharReceita(Long id) {
 		Optional<Receita> receita = receitaRepository.findById(id);
 		if (receita.isPresent()) {
@@ -51,6 +60,13 @@ public class ReceitaService {
 		}
 	}
 
+	/** Método para filtrar as receitas pela conta e por um período de datas
+	 * 
+	 * @param contaId
+	 * @param dataInicial
+	 * @param dataFinal
+	 * @return lista com todas as receitas pelo período que estejam na conta informada
+	 */
 	public List<Receita> filtroPorContaData(Long contaId, String dataInicial, String dataFinal) {
 		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -59,6 +75,12 @@ public class ReceitaService {
 		return receita;
 	}
 	
+	/** Método para filtrar as receitas pelo período de datas
+	 * 
+	 * @param dataInicial
+	 * @param dataFinal
+	 * @return lista com todas as receitas pelo período das datas informadas
+	 */
 	public List<Receita> filtroPorData(String dataInicial, String dataFinal){
 		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -67,6 +89,11 @@ public class ReceitaService {
 		return receita;
 	}
 
+	/** Método para filtrar as receitas pelo tipo da receita
+	 * 
+	 * @param tipoReceita
+	 * @return lista com todas as receitas de acordo com o tipo
+	 */
 	public List<Receita> filtroPorTipoReceita(String tipoReceita) {
 		tipoReceita = tipoReceita.toUpperCase();
 		TipoReceita tipo = TipoReceita.valueOf(tipoReceita);
@@ -74,6 +101,12 @@ public class ReceitaService {
 		return receita;
 	}
 
+	/** Método para filtrar as receitas por determinada conta e pelo tipo da receita
+	 * 
+	 * @param contaId
+	 * @param tipoReceita
+	 * @return lista com todas as receitas de acordo com o tipo e conta informada
+	 */
 	public List<Receita> filtroPorContaTipoReceita(Long contaId, String tipoReceita) {
 		tipoReceita = tipoReceita.toUpperCase();
 		TipoReceita tipo = TipoReceita.valueOf(tipoReceita);
@@ -81,16 +114,31 @@ public class ReceitaService {
 		return receita;
 	}
 
+	/** Método para visualizar o valor total das receitas
+	 * 
+	 * @return valor total das receitas
+	 */
 	public Optional<Double> valorTotalReceitas() {
 		Optional<Double> valorTotal = receitaRepository.findValorTotalReceita();
 		return valorTotal;
 	}
 	
+	/** Método para visualizar o valor total das receitas por determinada conta
+	 * 
+	 * @param contaId
+	 * @return valor total das receitas por conta
+	 */
 	public Optional<Double> valorTotalReceitaPorConta(Long contaId){
 		Optional<Double> valorTotal = receitaRepository.findValorTotalReceitaConta(contaId);
 		return valorTotal;
 	}
 
+	/** Método para cadastrar nova receita 
+	 * 
+	 * @param form
+	 * @param uriBuilder
+	 * @return
+	 */
 	public ResponseEntity<ReceitaDTO> cadastrarReceita(@Valid ReceitaForm form, UriComponentsBuilder uriBuilder) {
 		Receita receita = form.converter(contaRepository);
 		receitaRepository.save(receita);
@@ -99,6 +147,12 @@ public class ReceitaService {
 		return ResponseEntity.created(uri).body(new ReceitaDTO(receita));
 	}
 
+	/** Método para atualizar os dados de uma receita já existente
+	 * 
+	 * @param id
+	 * @param form
+	 * @return
+	 */
 	public ResponseEntity<ReceitaDTO> atualizarReceita(Long id, @Valid ReceitaForm form) {
 		Optional<Receita> optional = receitaRepository.findById(id);
 
@@ -111,6 +165,11 @@ public class ReceitaService {
 		}
 	}
 
+	/** Método para remover uma receita
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public ResponseEntity<?> removerReceita(Long id) {
 		Optional<Receita> optional = receitaRepository.findById(id);
 

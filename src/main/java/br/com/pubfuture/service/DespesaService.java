@@ -34,6 +34,10 @@ public class DespesaService {
 	@Autowired
     private ModelMapper modelMapper;
 
+	/** Método para listar todas as despesas cadastradas
+	 * 
+	 * @return lista com todas as despesas
+	 */
 	public List<DespesaDTO> lista() {
 		List<Despesa> despesa = despesaRepository.findAll();
 		return despesa
@@ -42,6 +46,11 @@ public class DespesaService {
 				.collect(Collectors.toList());
 	}
 
+	/** Método para detalhar todas as informações de uma despesa
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public ResponseEntity<DespesaDTO> detalharDespesa(Long id) {
 		Optional<Despesa> despesa = despesaRepository.findById(id);
 		if (despesa.isPresent()) {
@@ -51,6 +60,13 @@ public class DespesaService {
 		}
 	}
 
+	/** Método para filtrar as despesas pela conta e um período de datas
+	 * 
+	 * @param contaId
+	 * @param dataInicial
+	 * @param dataFinal
+	 * @return lista das despesas
+	 */
 	public List<Despesa> filtroPorContaData(Long contaId, String dataInicial, String dataFinal) {
 		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -59,6 +75,12 @@ public class DespesaService {
 		return despesa;
 	}
 	
+	/** Método para filtrar todas as despesas em um período de datas
+	 * 
+	 * @param dataInicial
+	 * @param dataFinal
+	 * @return lista das despesas
+	 */
 	public List<Despesa> filtroPorData(String dataInicial, String dataFinal){
 		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -66,7 +88,13 @@ public class DespesaService {
 		List<Despesa> despesa = despesaRepository.findByDataPagamentoBetween(dataIni, dataFim);
 		return despesa;
 	}
-
+	
+	/** Método para filtrar despesas pela conta e pelo tipo da despesa
+	 * 
+	 * @param contaId
+	 * @param tipoDespesa
+	 * @return lista com as despesas
+	 */
 	public List<Despesa> filtroPorContaTipoDespesa(Long contaId, String tipoDespesa) {
 		tipoDespesa = tipoDespesa.toUpperCase();
 		TipoDespesa tipo = TipoDespesa.valueOf(tipoDespesa);
@@ -74,6 +102,11 @@ public class DespesaService {
 		return despesa;
 	}
 
+	/** Método para filtrar despesas pelo tipo da despesa
+	 * 
+	 * @param tipoDespesa
+	 * @return lista com as despesas
+	 */
 	public List<Despesa> filtroPorTipoDespesa(String tipoDespesa) {
 		tipoDespesa = tipoDespesa.toUpperCase();
 		TipoDespesa tipo = TipoDespesa.valueOf(tipoDespesa);
@@ -81,16 +114,31 @@ public class DespesaService {
 		return despesa;
 	}
 
+	/** Método para visualizar o valor total de todas as despesas
+	 * 
+	 * @return valor total das despesas
+	 */
 	public Optional<Double> valorTotalDespesas() {
 		Optional<Double> detalhes = despesaRepository.findValorTotalDespesa();
 		return detalhes;
 	}
 	
+	/** Método para visualizar o valor total das despesas de determinada conta
+	 * 
+	 * @param contaId
+	 * @return valor total das despesas
+	 */
 	public Optional<Double> valorTotalReceitaPorConta(Long contaId){
 		Optional<Double> valorTotal = despesaRepository.findValorTotalDespesaConta(contaId);
 		return valorTotal;
 	}
 
+	/** Método para cadastrar uma nova despesa no sistema
+	 * 
+	 * @param form
+	 * @param uriBuilder
+	 * @return
+	 */
 	public ResponseEntity<DespesaDTO> cadastrarDespesa(@Valid DespesaForm form, UriComponentsBuilder uriBuilder) {
 		Despesa despesa = form.converter(contaRepository);
 		despesaRepository.save(despesa);
@@ -99,6 +147,12 @@ public class DespesaService {
 		return ResponseEntity.created(uri).body(new DespesaDTO(despesa));
 	}
 
+	/** Método para atualizar as informações de uma despesa já cadastrada
+	 * 
+	 * @param id
+	 * @param form
+	 * @return
+	 */
 	public ResponseEntity<DespesaDTO> atualizarDespesa(Long id, @Valid DespesaForm form) {
 		Optional<Despesa> optional = despesaRepository.findById(id);
 
@@ -111,6 +165,11 @@ public class DespesaService {
 		}
 	}
 
+	/** Método para remover uma despesa
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public ResponseEntity<?> removerDespesa(Long id) {
 		Optional<Despesa> optional = despesaRepository.findById(id);
 
