@@ -1,8 +1,5 @@
 package br.com.pubfuture.controller;
 
-import java.net.URI;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,102 +20,61 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.pubfuture.dto.DespesaDTO;
-import br.com.pubfuture.enums.TipoDespesa;
 import br.com.pubfuture.form.DespesaForm;
 import br.com.pubfuture.model.Despesa;
-import br.com.pubfuture.repository.ContaRepository;
-import br.com.pubfuture.repository.DespesaRepository;
+import br.com.pubfuture.service.DespesaService;
 
 @RestController
 @RequestMapping("/despesas")
 public class DespesaController {
 
 	@Autowired
-	private ContaRepository contaRepository;
-	
-	@Autowired
-	private DespesaRepository despesaRepository;
-	
+	private DespesaService service;
+
 	@GetMapping
-	public Page<DespesaDTO> lista(Pageable paginacao){
-			Page<Despesa> despesa = despesaRepository.findAll(paginacao);
-			return DespesaDTO.converter(despesa);
+	public Page<DespesaDTO> lista(Pageable paginacao) {
+		return service.lista(paginacao);
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<DespesaDTO> detalharDespesa(@PathVariable Long id){
-		Optional<Despesa> despesa = despesaRepository.findById(id);
-		if(despesa.isPresent()) {
-			return ResponseEntity.ok(new DespesaDTO(despesa.get()));
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<DespesaDTO> detalharDespesa(@PathVariable Long id) {
+		return service.detalharDespesa(id);
 	}
-	
+
 	@GetMapping("{contaId}/{dataInicial}/{dataFinal}")
-	public List<Despesa> filtroPorData(@PathVariable Long contaId, 
-			@PathVariable String dataInicial, @PathVariable String dataFinal){
-		 LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		 LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		 
-		List<Despesa> despesa = despesaRepository.findByContaIdAndDataPagamentoBetween(contaId, dataIni, dataFim);
-		return despesa;
+	public List<Despesa> filtroPorData(@PathVariable Long contaId, @PathVariable String dataInicial,
+			@PathVariable String dataFinal) {
+		return service.filtroPorData(contaId, dataInicial, dataFinal);
 	}
-	
+
 	@GetMapping("{contaId}/{tipoDespesa}")
-	public List<Despesa> filtroPorContaTipoDespesa(@PathVariable Long contaId, @PathVariable String tipoDespesa){
-		tipoDespesa = tipoDespesa.toUpperCase();
-		TipoDespesa tipo = TipoDespesa.valueOf(tipoDespesa);
-		List<Despesa> despesa = despesaRepository.findByContaIdAndTipoDespesa(contaId, tipo);
-		return despesa;
+	public List<Despesa> filtroPorContaTipoDespesa(@PathVariable Long contaId, @PathVariable String tipoDespesa) {
+		return service.filtroPorContaTipoDespesa(contaId, tipoDespesa);
 	}
-	
+
 	@GetMapping("/tipo/{tipoDespesa}")
-	public List<Despesa> filtroPorTipoDespesa(@PathVariable String tipoDespesa){
-		tipoDespesa = tipoDespesa.toUpperCase();
-		TipoDespesa tipo = TipoDespesa.valueOf(tipoDespesa);
-		List<Despesa> despesa = despesaRepository.findByTipoDespesa(tipo);
-		return despesa;
+	public List<Despesa> filtroPorTipoDespesa(@PathVariable String tipoDespesa) {
+		return service.filtroPorTipoDespesa(tipoDespesa);
 	}
-	
+
 	@GetMapping("/valorTotalDespesas")
-	public Double valorTotalDespesas() {
-		Double detalhes = despesaRepository.findValorTotalDespesa();
-		return detalhes;
+	public Optional<Double> valorTotalDespesas() {
+		return service.valorTotalDespesas();
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<DespesaDTO> cadastrarDespesa(@RequestBody @Valid DespesaForm form, 
-			UriComponentsBuilder uriBuilder){
-		Despesa despesa = form.converter(contaRepository);
-		despesaRepository.save(despesa);
-		
-		URI uri = uriBuilder.path("/despesas/{id}").buildAndExpand(despesa.getId()).toUri();
-		return ResponseEntity.created(uri).body(new DespesaDTO(despesa));
+	public ResponseEntity<DespesaDTO> cadastrarDespesa(@RequestBody @Valid DespesaForm form,
+			UriComponentsBuilder uriBuilder) {
+		return service.cadastrarDespesa(form, uriBuilder);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<DespesaDTO> atualizarDespesa(@PathVariable Long id, 
-			@RequestBody @Valid DespesaForm form){
-		Optional<Despesa> optional = despesaRepository.findById(id);
-		
-		if(optional.isPresent()) {
-			Despesa despesa = form.atualizar(id, despesaRepository);
-			return ResponseEntity.ok(new DespesaDTO(despesa));
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<DespesaDTO> atualizarDespesa(@PathVariable Long id, @RequestBody @Valid DespesaForm form) {
+		return service.atualizarDespesa(id, form);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> removerDespesa(@PathVariable Long id){
-		Optional<Despesa> optional = despesaRepository.findById(id);
-		
-		if(optional.isPresent()) {
-			despesaRepository.deleteById(id);
-			return ResponseEntity.ok().build();
-		} else {
-			return ResponseEntity.notFound().build();
-		}
- 	}
+	public ResponseEntity<?> removerDespesa(@PathVariable Long id) {
+		return service.removerDespesa(id);
+	}
 }

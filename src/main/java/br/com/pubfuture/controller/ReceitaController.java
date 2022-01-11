@@ -1,8 +1,5 @@
 package br.com.pubfuture.controller;
 
-import java.net.URI;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,103 +20,61 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.pubfuture.dto.ReceitaDTO;
-import br.com.pubfuture.enums.TipoReceita;
 import br.com.pubfuture.form.ReceitaForm;
 import br.com.pubfuture.model.Receita;
-import br.com.pubfuture.repository.ContaRepository;
-import br.com.pubfuture.repository.ReceitaRepository;
+import br.com.pubfuture.service.ReceitaService;
 
 @RestController
 @RequestMapping("receitas")
 public class ReceitaController {
 
 	@Autowired
-	private ContaRepository contaRepository;
-	
-	@Autowired
-	private ReceitaRepository receitaRepository;
-	
+	private ReceitaService service;
+
 	@GetMapping
-	public Page<ReceitaDTO> lista(Pageable paginacao){
-			Page<Receita> receita = receitaRepository.findAll(paginacao);
-			return ReceitaDTO.converter(receita);
+	public Page<ReceitaDTO> lista(Pageable paginacao) {
+		return service.lista(paginacao);
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<ReceitaDTO> detalharReceita(@PathVariable Long id){
-		Optional<Receita> receita = receitaRepository.findById(id);
-		if(receita.isPresent()) {
-			return ResponseEntity.ok(new ReceitaDTO(receita.get()));
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<ReceitaDTO> detalharReceita(@PathVariable Long id) {
+		return service.detalharReceita(id);
 	}
-	
+
 	@GetMapping("{contaId}/{dataInicial}/{dataFinal}")
-	public List<Receita> filtroPorData(@PathVariable Long contaId, @PathVariable String dataInicial, 
-			@PathVariable String dataFinal){
-		 LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		 LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		 
-		List<Receita> receita = receitaRepository.findByContaIdAndDataRecebimentoBetween(contaId, dataIni, dataFim);
-		return receita;
+	public List<Receita> filtroPorData(@PathVariable Long contaId, @PathVariable String dataInicial,
+			@PathVariable String dataFinal) {
+		return service.filtroPorData(contaId, dataInicial, dataFinal);
 	}
-	
+
 	@GetMapping("/tipo/{tipoReceita}")
-	public List<Receita> filtroPorTipoReceita (@PathVariable String tipoReceita){
-		tipoReceita = tipoReceita.toUpperCase();
-		TipoReceita tipo = TipoReceita.valueOf(tipoReceita);
-		List<Receita> receita = receitaRepository.findByTipoReceita(tipo);
-		return receita;
+	public List<Receita> filtroPorTipoReceita(@PathVariable String tipoReceita) {
+		return service.filtroPorTipoReceita(tipoReceita);
 	}
-	
+
 	@GetMapping("{contaId}/{tipoReceita}")
-	public List<Receita> filtroPorContaTipoReceita(@PathVariable Long contaId, @PathVariable String tipoReceita){
-		tipoReceita = tipoReceita.toUpperCase();
-		TipoReceita tipo = TipoReceita.valueOf(tipoReceita);
-		List<Receita> receita = receitaRepository.findByContaIdAndTipoReceita(contaId, tipo);
-		return receita;
+	public List<Receita> filtroPorContaTipoReceita(@PathVariable Long contaId, @PathVariable String tipoReceita) {
+		return service.filtroPorContaTipoReceita(contaId, tipoReceita);
 	}
-	
+
 	@GetMapping("/valorTotalReceitas")
-	public Double valorTotalReceitas() {
-		Double detalhes = receitaRepository.findValorTotalReceita();
-		return detalhes;
+	public Optional<Double> valorTotalReceitas() {
+		return service.valorTotalReceitas();
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<ReceitaDTO> cadastrarReceita(@RequestBody @Valid ReceitaForm form, 
-			UriComponentsBuilder uriBuilder){
-		Receita receita = form.converter(contaRepository);
-		receitaRepository.save(receita);
-		
-		URI uri = uriBuilder.path("/receitas/{id}").buildAndExpand(receita.getId()).toUri();
-		return ResponseEntity.created(uri).body(new ReceitaDTO(receita));
+	public ResponseEntity<ReceitaDTO> cadastrarReceita(@RequestBody @Valid ReceitaForm form,
+			UriComponentsBuilder uriBuilder) {
+		return service.cadastrarReceita(form, uriBuilder);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<ReceitaDTO> atualizarReceita(@PathVariable Long id, 
-			@RequestBody @Valid ReceitaForm form){
-		Optional<Receita> optional = receitaRepository.findById(id);
-		
-		if(optional.isPresent()) {
-			Receita receita = form.atualizar(id, receitaRepository);
-			return ResponseEntity.ok(new ReceitaDTO(receita));
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<ReceitaDTO> atualizarReceita(@PathVariable Long id, @RequestBody @Valid ReceitaForm form) {
+		return service.atualizarReceita(id, form);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> removerReceita(@PathVariable Long id){
-		Optional<Receita> optional = receitaRepository.findById(id);
-		
-		if(optional.isPresent()) {
-			receitaRepository.deleteById(id);
-			return ResponseEntity.ok().build();
-		} else {
-			return ResponseEntity.notFound().build();
-		}
- 	}
-	
+	public ResponseEntity<?> removerReceita(@PathVariable Long id) {
+		return service.removerReceita(id);
+	}
 }

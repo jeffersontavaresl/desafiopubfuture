@@ -2,6 +2,7 @@ package br.com.pubfuture.repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,6 +21,6 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long>{
 	List<Receita> findByTipoReceita(TipoReceita tipo);
 	
 	@Query("SELECT SUM(r.valor) FROM Receita r")
-	Double findValorTotalReceita();
+	Optional<Double> findValorTotalReceita();
 	
 }

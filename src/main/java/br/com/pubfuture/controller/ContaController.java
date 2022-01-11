@@ -1,10 +1,5 @@
 package br.com.pubfuture.controller;
 
-import java.net.URI;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,82 +18,48 @@ import br.com.pubfuture.dto.ContaDTO;
 import br.com.pubfuture.dto.DetalhesContaDTO;
 import br.com.pubfuture.form.ContaForm;
 import br.com.pubfuture.form.EditarContaForm;
-import br.com.pubfuture.model.Conta;
-import br.com.pubfuture.repository.ContaRepository;
-
+import br.com.pubfuture.service.ContaService;
 
 @RestController
 @RequestMapping("conta")
 public class ContaController {
 
 	@Autowired
-	private ContaRepository repository;
-	
+	private ContaService service;
+
 	@GetMapping
 	public Page<ContaDTO> listaDeContas(Pageable paginacao) {
-		Page<Conta> contas = repository.findAll(paginacao);
-		return ContaDTO.converter(contas);
+		return service.listaDeContas(paginacao);
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<DetalhesContaDTO> detalhesDaConta(@PathVariable Long id) {
-		Optional<Conta> optional = repository.findById(id);
-		
-		if(optional.isPresent()) {
-			return ResponseEntity.ok(new DetalhesContaDTO(optional.get()));
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+		return service.detalhesDaConta(id);
 	}
-	
+
 	@GetMapping("{contaOrigem}/{contaDestino}/{valorTransferencia}")
-	public ResponseEntity<ContaDTO> transferenciaEntreContas(@PathVariable Long contaOrigem, Long contaDestino, Double valor){
-		Conta contaO = repository.findById(contaOrigem).get();
-		Conta contaD = repository.findById(contaDestino).get();
-		
-		if(contaO.getSaldo() > 0) {
-			contaD.setSaldo(contaD.getSaldo() + valor);
-			contaO.setSaldo(contaO.getSaldo() - valor);
-		repository.save(contaO);
-		repository.save(contaD);
-			return ResponseEntity.ok(new ContaDTO(contaO));
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<ContaDTO> transferenciaEntreContas(@PathVariable Long contaOrigem,
+			@PathVariable Long contaDestino, @PathVariable Double valor) {
+		return service.transferenciaEntreContas(contaOrigem, contaDestino, valor);
 	}
-	
+
+	@GetMapping("/saldoTotal")
+	public ResponseEntity<Double> saldoTotal() {
+		return service.saldoTotal();
+	}
+
 	@PostMapping
-	public ResponseEntity<ContaDTO> cadastrarConta(@RequestBody @Valid ContaForm form, 
-			UriComponentsBuilder uriBuilder){
-		Conta conta = form.converter();
-		repository.save(conta);
-		
-		URI uri = uriBuilder.path("/categoria/{id}").buildAndExpand(conta.getId()).toUri();
-		return ResponseEntity.created(uri).body((new ContaDTO(conta)));
+	public ResponseEntity<ContaDTO> cadastrarConta(@RequestBody ContaForm form, UriComponentsBuilder uriBuilder) {
+		return service.cadastrarConta(form, uriBuilder);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<ContaDTO> editarConta(@PathVariable Long id, 
-			@RequestBody @Valid EditarContaForm form){
-		Optional<Conta> optional = repository.findById(id);
-		
-		if(optional.isPresent()) {
-			Conta conta = form.editarConta(id, repository);
-			return ResponseEntity.ok(new ContaDTO(conta));
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<ContaDTO> editarConta(@PathVariable Long id, @RequestBody EditarContaForm form) {
+		return service.editarConta(id, form);
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> removerConta(@PathVariable Long id){
-		Optional<Conta> optional = repository.findById(id);
-		
-		if(optional.isPresent()) {
-			repository.deleteById(id);
-			return ResponseEntity.ok().build();
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<?> removerConta(@PathVariable Long id) {
+		return service.removerConta(id);
 	}
 }
