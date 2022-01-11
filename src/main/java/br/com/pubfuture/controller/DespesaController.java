@@ -50,8 +50,15 @@ public class DespesaController {
 	@ApiOperation("Filtrar despesas pelo ID da conta, data inicial e a data final")
 	public List<Despesa> filtroPorData(@PathVariable Long contaId, @PathVariable String dataInicial,
 			@PathVariable String dataFinal) {
-		return service.filtroPorData(contaId, dataInicial, dataFinal);
+		return service.filtroPorContaData(contaId, dataInicial, dataFinal);
 	}
+	
+	@GetMapping("/data/{dataInicial}/{dataFinal}")
+	@ApiOperation("Filtrar despesas pelas datas")
+	public List<Despesa> filtroPorData(@PathVariable String dataInicial, @PathVariable String dataFinal){
+		return service.filtroPorData(dataInicial, dataFinal);
+	}
+
 
 	@GetMapping("{contaId}/{tipoDespesa}")
 	@ApiOperation("Filtrar despesas pelo ID da conta e pelo tipo da despesa")

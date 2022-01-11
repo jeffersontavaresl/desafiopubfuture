@@ -45,11 +45,19 @@ public class ReceitaService {
 		}
 	}
 
-	public List<Receita> filtroPorData(Long contaId, String dataInicial, String dataFinal) {
+	public List<Receita> filtroPorContaData(Long contaId, String dataInicial, String dataFinal) {
 		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
 		List<Receita> receita = receitaRepository.findByContaIdAndDataRecebimentoBetween(contaId, dataIni, dataFim);
+		return receita;
+	}
+	
+	public List<Receita> filtroPorData(String dataInicial, String dataFinal){
+		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		
+		List<Receita> receita = receitaRepository.findByDataRecebimentoBetween(dataIni, dataFim);
 		return receita;
 	}
 

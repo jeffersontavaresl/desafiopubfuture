@@ -48,9 +48,15 @@ public class ReceitaController {
 
 	@GetMapping("{contaId}/{dataInicial}/{dataFinal}")
 	@ApiOperation("Filtrar receitas pelo ID da conta, data inicial e a data final")
-	public List<Receita> filtroPorData(@PathVariable Long contaId, @PathVariable String dataInicial,
+	public List<Receita> filtroPorContaData(@PathVariable Long contaId, @PathVariable String dataInicial,
 			@PathVariable String dataFinal) {
-		return service.filtroPorData(contaId, dataInicial, dataFinal);
+		return service.filtroPorContaData(contaId, dataInicial, dataFinal);
+	}
+	
+	@GetMapping("/data/{dataInicial}/{dataFinal}")
+	@ApiOperation("Filtrar receitas pelas datas")
+	public List<Receita> filtroPorData(@PathVariable String dataInicial, @PathVariable String dataFinal){
+		return service.filtroPorData(dataInicial, dataFinal);
 	}
 
 	@GetMapping("/tipo/{tipoReceita}")

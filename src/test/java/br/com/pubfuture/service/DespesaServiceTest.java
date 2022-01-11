@@ -84,7 +84,7 @@ public class DespesaServiceTest {
 				TipoDespesa.TRANSPORTE, conta);
 		em.persist(despesa3);
 		
-		service.filtroPorData(1L, "2020-10-10", "2015-10-10");
+		service.filtroPorContaData(1L, "2020-10-10", "2015-10-10");
 	}
 	
 	@Test

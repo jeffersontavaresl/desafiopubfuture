@@ -15,6 +15,8 @@ import br.com.pubfuture.model.Despesa;
 public interface DespesaRepository extends JpaRepository<Despesa, Long>{
 
 	List<Despesa> findByContaIdAndDataPagamentoBetween(Long contaId, LocalDate dataIni, LocalDate dataFim);
+	
+	List<Despesa> findByDataPagamentoBetween(LocalDate dataIni, LocalDate dataFim);
 
 	List<Despesa> findByContaIdAndTipoDespesa(Long contaId, TipoDespesa tipoDespesa);
 

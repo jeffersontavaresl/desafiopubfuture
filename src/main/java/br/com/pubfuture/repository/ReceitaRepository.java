@@ -15,6 +15,8 @@ import br.com.pubfuture.model.Receita;
 public interface ReceitaRepository extends JpaRepository<Receita, Long>{
 
 	List<Receita> findByContaIdAndDataRecebimentoBetween(Long contaId, LocalDate dataIni, LocalDate dataFim);
+	
+	List<Receita> findByDataRecebimentoBetween(LocalDate dataIni, LocalDate dataFim);
 
 	List<Receita> findByContaIdAndTipoReceita(Long contaId, TipoReceita tipo);
 
@@ -25,4 +27,5 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long>{
 	
 	@Query("SELECT SUM(r.valor) FROM Receita r WHERE conta_id = ?1")
 	Optional<Double> findValorTotalReceitaConta(Long contaId);
+
 }

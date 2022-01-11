@@ -45,11 +45,19 @@ public class DespesaService {
 		}
 	}
 
-	public List<Despesa> filtroPorData(Long contaId, String dataInicial, String dataFinal) {
+	public List<Despesa> filtroPorContaData(Long contaId, String dataInicial, String dataFinal) {
 		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
 		List<Despesa> despesa = despesaRepository.findByContaIdAndDataPagamentoBetween(contaId, dataIni, dataFim);
+		return despesa;
+	}
+	
+	public List<Despesa> filtroPorData(String dataInicial, String dataFinal){
+		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		
+		List<Despesa> despesa = despesaRepository.findByDataPagamentoBetween(dataIni, dataFim);
 		return despesa;
 	}
 

@@ -86,7 +86,7 @@ public class ReceitaServiceTest {
 				TipoReceita.PREMIO, conta);
 		em.persist(receita3);
 		
-		service.filtroPorData(1L, "2020-10-10", "2015-10-10");
+		service.filtroPorContaData(1L, "2020-10-10", "2015-10-10");
 	}
 	
 	@Test
