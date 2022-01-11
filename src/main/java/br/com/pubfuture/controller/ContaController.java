@@ -45,8 +45,8 @@ public class ContaController {
 	@GetMapping("{contaOrigem}/{contaDestino}/{valorTransferencia}")
 	@ApiOperation("Realizar a transferência do saldo de uma conta para outra")
 	public ResponseEntity<ContaDTO> transferenciaEntreContas(@PathVariable Long contaOrigem,
-			@PathVariable Long contaDestino, @PathVariable Double valor) {
-		return service.transferenciaEntreContas(contaOrigem, contaDestino, valor);
+			@PathVariable Long contaDestino, @PathVariable Double valorTransferencia) {
+		return service.transferenciaEntreContas(contaOrigem, contaDestino, valorTransferencia);
 	}
 
 	@GetMapping("/saldoTotal")

@@ -55,16 +55,15 @@ public class ContaService {
 		}
 	}
 
-	public ResponseEntity<ContaDTO> transferenciaEntreContas(Long contaOrigem, Long contaDestino, Double valor) {
+	public ResponseEntity<ContaDTO> transferenciaEntreContas(Long contaOrigem, Long contaDestino, Double valorTransferencia) {
 		Conta contaO = repository.findById(contaOrigem).get();
 		Conta contaD = repository.findById(contaDestino).get();
-
 		if (contaO.getSaldo() > 0) {
-			contaD.setSaldo(contaD.getSaldo() + valor);
-			contaO.setSaldo(contaO.getSaldo() - valor);
+			contaD.setSaldo(contaD.getSaldo() + valorTransferencia);
+			contaO.setSaldo(contaO.getSaldo() - valorTransferencia);
 			repository.save(contaO);
 			repository.save(contaD);
-			return ResponseEntity.ok(new ContaDTO(contaO));
+			return ResponseEntity.ok(new ContaDTO(contaD));
 		} else {
 			return ResponseEntity.notFound().build();
 		}
