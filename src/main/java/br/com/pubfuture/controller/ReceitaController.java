@@ -61,6 +61,11 @@ public class ReceitaController {
 	public Optional<Double> valorTotalReceitas() {
 		return service.valorTotalReceitas();
 	}
+	
+	@GetMapping("{contaId}/valorTotalReceitas")
+	public Optional<Double> valorTotalReceitaConta(@PathVariable Long contaId){
+		return service.valorTotalReceitaPorConta(contaId);
+	}
 
 	@PostMapping
 	public ResponseEntity<ReceitaDTO> cadastrarReceita(@RequestBody @Valid ReceitaForm form,

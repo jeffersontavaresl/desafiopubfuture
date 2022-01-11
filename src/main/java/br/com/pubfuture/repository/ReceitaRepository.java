@@ -23,4 +23,6 @@ public interface ReceitaRepository extends JpaRepository<Receita, Long>{
 	@Query("SELECT SUM(r.valor) FROM Receita r")
 	Optional<Double> findValorTotalReceita();
 	
+	@Query("SELECT SUM(r.valor) FROM Receita r WHERE conta_id = ?1")
+	Optional<Double> findValorTotalReceitaConta(Long contaId);
 }

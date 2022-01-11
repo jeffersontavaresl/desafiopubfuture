@@ -85,8 +85,34 @@ public class ContaService {
 		}
 	}
 	
+	public ResponseEntity<Double> saldoTotalPorConta(Long contaId) {
+		Optional<Double> receita = receitaRepository.findValorTotalReceitaConta(contaId);
+		Optional<Double> despesa = despesaRepository.findValorTotalDespesaConta(contaId);
+		Double saldoTotal = saldoDaContaId(contaId);
+
+		if(receita.isPresent() && despesa.isPresent()) {
+			saldoTotal = (saldoDaContaId(contaId) + receita.get() - despesa.get());
+			return ResponseEntity.ok(saldoTotal);
+		} 
+		if(receita.isPresent() && despesa.isEmpty()) {
+			saldoTotal = (receita.get() + saldoDaContaId(contaId));
+			return ResponseEntity.ok(saldoTotal);
+		}
+		if(receita.isEmpty() && despesa.isPresent()) {
+			saldoTotal = (saldoDaContaId(contaId) - despesa.get());
+			return ResponseEntity.ok(saldoTotal);
+		}
+		else {
+			return ResponseEntity.ok(saldoDaContaId(contaId));
+		}
+	}
+	
 	public Double saldoDaConta() {
 		return repository.findValorTotalConta();
+	}
+	
+	public Double saldoDaContaId(Long contaId) {
+		return repository.findValorTotalContaId(contaId);
 	}
 
 	public ResponseEntity<ContaDTO> cadastrarConta(@Valid ContaForm form, UriComponentsBuilder uriBuilder) {

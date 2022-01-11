@@ -71,6 +71,11 @@ public class DespesaService {
 		Optional<Double> detalhes = despesaRepository.findValorTotalDespesa();
 		return detalhes;
 	}
+	
+	public Optional<Double> valorTotalReceitaPorConta(Long contaId){
+		Optional<Double> valorTotal = despesaRepository.findValorTotalDespesaConta(contaId);
+		return valorTotal;
+	}
 
 	public ResponseEntity<DespesaDTO> cadastrarDespesa(@Valid DespesaForm form, UriComponentsBuilder uriBuilder) {
 		Despesa despesa = form.converter(contaRepository);
@@ -85,6 +90,7 @@ public class DespesaService {
 
 		if (optional.isPresent()) {
 			Despesa despesa = form.atualizar(id, despesaRepository);
+			despesaRepository.save(despesa);
 			return ResponseEntity.ok(new DespesaDTO(despesa));
 		} else {
 			return ResponseEntity.notFound().build();

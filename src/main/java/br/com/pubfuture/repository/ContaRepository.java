@@ -12,4 +12,6 @@ public interface ContaRepository extends JpaRepository<Conta, Long>{
 	@Query("SELECT SUM(c.saldo) FROM Conta c")
 	Double findValorTotalConta();
 
+	@Query("SELECT SUM(c.saldo) FROM Conta c WHERE id = ?1")
+	Double findValorTotalContaId(Long id);
 }

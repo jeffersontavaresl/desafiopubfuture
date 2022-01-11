@@ -23,4 +23,6 @@ public interface DespesaRepository extends JpaRepository<Despesa, Long>{
 	@Query("SELECT SUM(d.valor) FROM Despesa d")
 	Optional<Double> findValorTotalDespesa();
 
+	@Query("SELECT SUM(d.valor) FROM Despesa d WHERE conta_id = ?1")
+	Optional<Double> findValorTotalDespesaConta(Long contaId);
 }

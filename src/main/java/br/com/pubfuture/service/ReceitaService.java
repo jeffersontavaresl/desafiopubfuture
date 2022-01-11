@@ -68,8 +68,13 @@ public class ReceitaService {
 	}
 
 	public Optional<Double> valorTotalReceitas() {
-		Optional<Double> detalhes = receitaRepository.findValorTotalReceita();
-		return detalhes;
+		Optional<Double> valorTotal = receitaRepository.findValorTotalReceita();
+		return valorTotal;
+	}
+	
+	public Optional<Double> valorTotalReceitaPorConta(Long contaId){
+		Optional<Double> valorTotal = receitaRepository.findValorTotalReceitaConta(contaId);
+		return valorTotal;
 	}
 
 	public ResponseEntity<ReceitaDTO> cadastrarReceita(@Valid ReceitaForm form, UriComponentsBuilder uriBuilder) {
@@ -85,6 +90,7 @@ public class ReceitaService {
 
 		if (optional.isPresent()) {
 			Receita receita = form.atualizar(id, receitaRepository);
+			receitaRepository.save(receita);
 			return ResponseEntity.ok(new ReceitaDTO(receita));
 		} else {
 			return ResponseEntity.notFound().build();

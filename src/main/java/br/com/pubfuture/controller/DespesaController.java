@@ -61,6 +61,11 @@ public class DespesaController {
 	public Optional<Double> valorTotalDespesas() {
 		return service.valorTotalDespesas();
 	}
+	
+	@GetMapping("{contaId}/valorTotalDespesas")
+	public Optional<Double> valorTotalDespesaConta(@PathVariable Long contaId){
+		return service.valorTotalReceitaPorConta(contaId);
+	}
 
 	@PostMapping
 	public ResponseEntity<DespesaDTO> cadastrarDespesa(@RequestBody @Valid DespesaForm form,

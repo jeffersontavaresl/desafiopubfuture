@@ -47,6 +47,11 @@ public class ContaController {
 	public ResponseEntity<Double> saldoTotal() {
 		return service.saldoTotal();
 	}
+	
+	@GetMapping("{id}/saldoTotal")
+	public ResponseEntity<Double> saldoTotalConta(@PathVariable Long id){
+		return service.saldoTotalPorConta(id);
+	}
 
 	@PostMapping
 	public ResponseEntity<ContaDTO> cadastrarConta(@RequestBody ContaForm form, UriComponentsBuilder uriBuilder) {
