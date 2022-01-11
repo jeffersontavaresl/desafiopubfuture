@@ -6,8 +6,6 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,8 +34,8 @@ public class DespesaController {
 
 	@GetMapping
 	@ApiOperation("Listar todas as despesas")
-	public Page<DespesaDTO> lista(Pageable paginacao) {
-		return service.lista(paginacao);
+	public List<DespesaDTO> lista() {
+		return service.lista();
 	}
 
 	@GetMapping("/{id}")

@@ -2,13 +2,13 @@ package br.com.pubfuture.dto;
 
 import java.time.LocalDate;
 
-import org.springframework.data.domain.Page;
-
 import br.com.pubfuture.enums.TipoDespesa;
 import br.com.pubfuture.model.Despesa;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class DespesaDTO {
 
 	private Long id;
@@ -18,7 +18,7 @@ public class DespesaDTO {
 	private String descricao;
 	private Long contaId;
 	private TipoDespesa tipoDespesa;
-	
+		
 	public DespesaDTO(Despesa despesa) {
 		this.id = despesa.getId();
 		this.valor = despesa.getValor();
@@ -27,10 +27,6 @@ public class DespesaDTO {
 		this.descricao = despesa.getDescricao();
 		this.contaId = despesa.getConta().getId();
 		this.tipoDespesa = despesa.getTipoDespesa();
-	}
-	
-	public static Page<DespesaDTO> converter(Page<Despesa> despesa){
-		return despesa.map(DespesaDTO::new);
 	}
 	
 }

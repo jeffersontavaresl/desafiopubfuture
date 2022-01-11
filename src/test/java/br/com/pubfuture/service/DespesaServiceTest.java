@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import br.com.pubfuture.enums.TipoConta;
@@ -38,7 +37,7 @@ public class DespesaServiceTest {
 	}
 	
 	@Test
-	void deveriaListarTodasAsDespesas(Pageable page) {	
+	void deveriaListarTodasAsDespesas() {	
 		Despesa despesa = new Despesa(600.00, LocalDate.now(), 
 				LocalDate.now(), "Compras no mercado",
 				TipoDespesa.ALIMENTACAO, conta);
@@ -59,7 +58,7 @@ public class DespesaServiceTest {
 				TipoDespesa.TRANSPORTE, conta);
 		em.persist(despesa3);
 		
-		service.lista(page);
+		service.lista();
 	}
 	
 	@Test

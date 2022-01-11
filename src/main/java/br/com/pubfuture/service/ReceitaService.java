@@ -5,12 +5,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,10 +30,16 @@ public class ReceitaService {
 
 	@Autowired
 	private ReceitaRepository receitaRepository;
+	
+	@Autowired
+    private ModelMapper modelMapper;
 
-	public Page<ReceitaDTO> lista(Pageable paginacao) {
-		Page<Receita> receita = receitaRepository.findAll(paginacao);
-		return ReceitaDTO.converter(receita);
+	public List<ReceitaDTO> lista() {
+		List<Receita> receita = receitaRepository.findAll();
+		return receita
+				.stream()
+				.map(r -> modelMapper.map(r, ReceitaDTO.class))
+				.collect(Collectors.toList());
 	}
 
 	public ResponseEntity<ReceitaDTO> detalharReceita(Long id) {

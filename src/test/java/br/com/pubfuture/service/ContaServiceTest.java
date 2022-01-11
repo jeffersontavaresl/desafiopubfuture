@@ -6,7 +6,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import br.com.pubfuture.enums.TipoConta;
@@ -30,7 +29,7 @@ public class ContaServiceTest {
 	}
 	
 	@Test
-	void deveriaListarTodasAsContas(Pageable page) {
+	void deveriaListarTodasAsContas() {
 		Conta conta = new Conta("Banco do Brasil", 100.00, TipoConta.CARTEIRA);
 		em.persist(conta);
 		Conta conta2 = new Conta("Bradesco", 50.00, TipoConta.CARTEIRA);
@@ -40,7 +39,7 @@ public class ContaServiceTest {
 		Conta conta4 = new Conta("Banco do Brasil", 700.00, TipoConta.POUPANCA);
 		em.persist(conta4);
 
-		service.listaDeContas(page);
+		service.listaDeContas();
 	}
 	
 	@Test

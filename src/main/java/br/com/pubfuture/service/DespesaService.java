@@ -5,12 +5,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,10 +30,16 @@ public class DespesaService {
 
 	@Autowired
 	private DespesaRepository despesaRepository;
+	
+	@Autowired
+    private ModelMapper modelMapper;
 
-	public Page<DespesaDTO> lista(Pageable paginacao) {
-		Page<Despesa> despesa = despesaRepository.findAll(paginacao);
-		return DespesaDTO.converter(despesa);
+	public List<DespesaDTO> lista() {
+		List<Despesa> despesa = despesaRepository.findAll();
+		return despesa
+				.stream()
+				.map(d -> modelMapper.map(d, DespesaDTO.class))
+				.collect(Collectors.toList());
 	}
 
 	public ResponseEntity<DespesaDTO> detalharDespesa(Long id) {

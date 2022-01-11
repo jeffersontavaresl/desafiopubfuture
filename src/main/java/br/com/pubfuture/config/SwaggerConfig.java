@@ -1,4 +1,4 @@
-package br.com.pubfuture;
+package br.com.pubfuture.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
