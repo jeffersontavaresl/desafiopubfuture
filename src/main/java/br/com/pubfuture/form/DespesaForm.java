@@ -2,7 +2,6 @@ package br.com.pubfuture.form;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import br.com.pubfuture.enums.TipoDespesa;
@@ -18,13 +17,13 @@ public class DespesaForm {
 	@NotNull
 	private Double valor;
 	
-	@NotNull
+	@NotNull 
 	private LocalDate dataPagamento;
 	
-	@NotNull
+	@NotNull 
 	private LocalDate dataPagamentoEsperado;
 	
-	@NotNull @NotEmpty
+	@NotNull 
 	private String descricao;
 	
 	@NotNull

@@ -17,6 +17,7 @@ public class ContaForm {
 	@NotNull
 	private Double saldo;
 	
+	@NotNull
 	private TipoConta tipoConta;
 	
 	public Conta converter() {

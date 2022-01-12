@@ -2,6 +2,8 @@ package br.com.pubfuture.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -74,13 +76,13 @@ public class ContaController {
 	
 	@PostMapping
 	@ApiOperation("Cadastrar uma conta")
-	public ResponseEntity<ContaDTO> cadastrarConta(@RequestBody ContaForm form, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ContaDTO> cadastrarConta(@RequestBody @Valid ContaForm form, UriComponentsBuilder uriBuilder) {
 		return service.cadastrarConta(form, uriBuilder);
 	}
 
 	@PutMapping("/{id}")
 	@ApiOperation("Alterar dados de uma conta")
-	public ResponseEntity<ContaDTO> editarConta(@PathVariable Long id, @RequestBody ContaForm form) {
+	public ResponseEntity<ContaDTO> editarConta(@PathVariable Long id, @RequestBody @Valid ContaForm form) {
 		return service.editarConta(id, form);
 	}
 
