@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import br.com.pubfuture.enums.TipoConta;
 import br.com.pubfuture.model.Conta;
+import br.com.pubfuture.repository.ContaRepository;
 import lombok.Data;
 
 @Data
@@ -20,5 +21,13 @@ public class ContaForm {
 	
 	public Conta converter() {
 		return new Conta(instituicaoFinanceira, saldo, tipoConta);
+	}
+	
+	public Conta atualizar(Long id, ContaRepository repository) {
+		Conta conta = repository.findById(id).get();
+		conta.setInstituicaoFinanceira(this.instituicaoFinanceira);
+		conta.setTipoConta(this.tipoConta);
+		conta.setSaldo(this.saldo);
+		return conta;
 	}
 }

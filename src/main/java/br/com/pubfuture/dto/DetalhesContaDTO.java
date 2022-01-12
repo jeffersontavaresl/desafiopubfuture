@@ -19,6 +19,7 @@ public class DetalhesContaDTO {
 	private String instituicaoFinanceira;
 	private List<ReceitaDTO> receitas = new ArrayList<>();
 	private List<DespesaDTO> despesas = new ArrayList<>();
+	
 		
 	public DetalhesContaDTO(Conta conta) {
 		this.id = conta.getId();

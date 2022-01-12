@@ -16,7 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.pubfuture.dto.ContaDTO;
 import br.com.pubfuture.dto.DetalhesContaDTO;
 import br.com.pubfuture.form.ContaForm;
-import br.com.pubfuture.form.EditarContaForm;
 import br.com.pubfuture.model.Conta;
 import br.com.pubfuture.repository.ContaRepository;
 import br.com.pubfuture.repository.DespesaRepository;
@@ -56,7 +55,6 @@ public class ContaService {
 	 */
 	public ResponseEntity<DetalhesContaDTO> detalhesDaConta(Long id) {
 		Optional<Conta> optional = repository.findById(id);
-
 		if (optional.isPresent()) {
 			return ResponseEntity.ok(new DetalhesContaDTO(optional.get()));
 		} else {
@@ -64,7 +62,7 @@ public class ContaService {
 		}
 	}
 
-	/** Método para realizar a transferência de saldo entre duas contas diferentes
+	/** Método para realizar a transferência de saldo entre duas contas
 	 * 
 	 * @param contaOrigem 
 	 * @param contaDestino
@@ -75,11 +73,43 @@ public class ContaService {
 		Conta contaO = repository.findById(contaOrigem).get();
 		Conta contaD = repository.findById(contaDestino).get();
 		if (contaO.getSaldo() > 0) {
-			contaD.setSaldo(contaD.getSaldo() + valorTransferencia);
-			contaO.setSaldo(contaO.getSaldo() - valorTransferencia);
-			repository.save(contaO);
-			repository.save(contaD);
+			depositar(contaD.getId(), valorTransferencia);
+			sacar(contaO.getId(), valorTransferencia);
 			return ResponseEntity.ok(new ContaDTO(contaD));
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	/** Método para realizar deposito em uma conta
+	 * 
+	 * @param contaId 
+	 * @param valorDepositado
+	 * @return
+	 */
+	public ResponseEntity<ContaDTO> depositar(Long contaId, Double valorDepositado) {
+		Optional<Conta> conta = repository.findById(contaId);
+		if(conta.isPresent()) {
+			conta.get().setSaldo(conta.get().getSaldo() + valorDepositado);
+			repository.save(conta.get());
+			return ResponseEntity.ok(new ContaDTO(conta.get()));
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	/** Método para realizar saque em uma conta
+	 * 
+	 * @param contaId
+	 * @param valorSacado
+	 * @return
+	 */
+	public ResponseEntity<ContaDTO> sacar(Long contaId, Double valorSacado) {
+		Optional<Conta> conta = repository.findById(contaId);
+		if(conta.isPresent()) {
+			conta.get().setSaldo(conta.get().getSaldo() - valorSacado);
+			repository.save(conta.get());
+			return ResponseEntity.ok(new ContaDTO(conta.get()));
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -175,11 +205,11 @@ public class ContaService {
 	 * @param form
 	 * @return
 	 */
-	public ResponseEntity<ContaDTO> editarConta(Long id, @Valid EditarContaForm form) {
+	public ResponseEntity<ContaDTO> editarConta(Long id, @Valid ContaForm form) {
 		Optional<Conta> optional = repository.findById(id);
 
 		if (optional.isPresent()) {
-			Conta conta = form.editarConta(id, repository);
+			Conta conta = form.atualizar(id, repository);
 			repository.save(conta);
 			return ResponseEntity.ok(new ContaDTO(conta));
 		} else {

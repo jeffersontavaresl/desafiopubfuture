@@ -17,7 +17,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.pubfuture.dto.ContaDTO;
 import br.com.pubfuture.dto.DetalhesContaDTO;
 import br.com.pubfuture.form.ContaForm;
-import br.com.pubfuture.form.EditarContaForm;
 import br.com.pubfuture.service.ContaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,7 +41,7 @@ public class ContaController {
 		return service.detalhesDaConta(id);
 	}
 
-	@GetMapping("{contaOrigem}/{contaDestino}/{valorTransferencia}")
+	@GetMapping("/{contaOrigem}/{contaDestino}/{valorTransferencia}")
 	@ApiOperation("Realizar a transferência do saldo de uma conta para outra")
 	public ResponseEntity<ContaDTO> transferenciaEntreContas(@PathVariable Long contaOrigem,
 			@PathVariable Long contaDestino, @PathVariable Double valorTransferencia) {
@@ -55,12 +54,24 @@ public class ContaController {
 		return service.saldoTotal();
 	}
 	
-	@GetMapping("{id}/saldoTotal")
+	@GetMapping("/{id}/saldoTotal")
 	@ApiOperation("Mostrar o saldo líquido de uma conta pelo ID")
 	public ResponseEntity<Double> saldoTotalConta(@PathVariable Long id){
 		return service.saldoTotalPorConta(id);
 	}
 
+	@GetMapping("/deposito/{id}/{valorDepositado}")
+	@ApiOperation("Realizar deposito na conta")
+	public ResponseEntity<ContaDTO> depositar(@PathVariable Long id, @PathVariable Double valorDepositado){
+		return service.depositar(id, valorDepositado);
+	}
+	
+	@GetMapping("/saque/{id}/{valorSacado}")
+	@ApiOperation("Realizar saque na conta")
+	public ResponseEntity<ContaDTO> sacar(@PathVariable Long id, @PathVariable Double valorSacado){
+		return service.sacar(id, valorSacado);
+	}
+	
 	@PostMapping
 	@ApiOperation("Cadastrar uma conta")
 	public ResponseEntity<ContaDTO> cadastrarConta(@RequestBody ContaForm form, UriComponentsBuilder uriBuilder) {
@@ -69,7 +80,7 @@ public class ContaController {
 
 	@PutMapping("/{id}")
 	@ApiOperation("Alterar dados de uma conta")
-	public ResponseEntity<ContaDTO> editarConta(@PathVariable Long id, @RequestBody EditarContaForm form) {
+	public ResponseEntity<ContaDTO> editarConta(@PathVariable Long id, @RequestBody ContaForm form) {
 		return service.editarConta(id, form);
 	}
 
