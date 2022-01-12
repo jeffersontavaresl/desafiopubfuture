@@ -194,7 +194,6 @@ public class ContaService {
 	public ResponseEntity<ContaDTO> cadastrarConta(@Valid ContaForm form, UriComponentsBuilder uriBuilder) {
 		Conta conta = form.converter();
 		repository.save(conta);
-
 		URI uri = uriBuilder.path("/categoria/{id}").buildAndExpand(conta.getId()).toUri();
 		return ResponseEntity.created(uri).body((new ContaDTO(conta)));
 	}
@@ -207,7 +206,6 @@ public class ContaService {
 	 */
 	public ResponseEntity<ContaDTO> editarConta(Long id, @Valid ContaForm form) {
 		Optional<Conta> optional = repository.findById(id);
-
 		if (optional.isPresent()) {
 			Conta conta = form.atualizar(id, repository);
 			repository.save(conta);

@@ -41,7 +41,7 @@ public class ContaController {
 		return service.detalhesDaConta(id);
 	}
 
-	@GetMapping("/{contaOrigem}/{contaDestino}/{valorTransferencia}")
+	@GetMapping("/transferencia/{contaOrigem}/{contaDestino}/{valorTransferencia}")
 	@ApiOperation("Realizar a transferência do saldo de uma conta para outra")
 	public ResponseEntity<ContaDTO> transferenciaEntreContas(@PathVariable Long contaOrigem,
 			@PathVariable Long contaDestino, @PathVariable Double valorTransferencia) {
@@ -54,7 +54,7 @@ public class ContaController {
 		return service.saldoTotal();
 	}
 	
-	@GetMapping("/{id}/saldoTotal")
+	@GetMapping("/saldoTotal/{id}")
 	@ApiOperation("Mostrar o saldo líquido de uma conta pelo ID")
 	public ResponseEntity<Double> saldoTotalConta(@PathVariable Long id){
 		return service.saldoTotalPorConta(id);

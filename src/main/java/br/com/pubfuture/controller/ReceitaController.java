@@ -19,7 +19,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.pubfuture.dto.ReceitaDTO;
 import br.com.pubfuture.form.ReceitaForm;
-import br.com.pubfuture.model.Receita;
 import br.com.pubfuture.service.ReceitaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,28 +43,28 @@ public class ReceitaController {
 		return service.detalharReceita(id);
 	}
 
-	@GetMapping("{contaId}/{dataInicial}/{dataFinal}")
+	@GetMapping("/data/{contaId}/{dataInicial}/{dataFinal}")
 	@ApiOperation("Filtrar receitas pelo ID da conta, data inicial e a data final")
-	public List<Receita> filtroPorContaData(@PathVariable Long contaId, @PathVariable String dataInicial,
+	public List<ReceitaDTO> filtroPorContaData(@PathVariable Long contaId, @PathVariable String dataInicial,
 			@PathVariable String dataFinal) {
 		return service.filtroPorContaData(contaId, dataInicial, dataFinal);
 	}
 	
 	@GetMapping("/data/{dataInicial}/{dataFinal}")
 	@ApiOperation("Filtrar receitas pelas datas")
-	public List<Receita> filtroPorData(@PathVariable String dataInicial, @PathVariable String dataFinal){
+	public List<ReceitaDTO> filtroPorData(@PathVariable String dataInicial, @PathVariable String dataFinal){
 		return service.filtroPorData(dataInicial, dataFinal);
 	}
 
-	@GetMapping("/tipo/{tipoReceita}")
+	@GetMapping("/tipoReceita/{tipoReceita}")
 	@ApiOperation("Filtrar despesas pelo tipo da receita")
-	public List<Receita> filtroPorTipoReceita(@PathVariable String tipoReceita) {
+	public List<ReceitaDTO> filtroPorTipoReceita(@PathVariable String tipoReceita) {
 		return service.filtroPorTipoReceita(tipoReceita);
 	}
 
-	@GetMapping("{contaId}/{tipoReceita}")
+	@GetMapping("/tipoReceita/{contaId}/{tipoReceita}")
 	@ApiOperation("Filtrar receitas pelo ID da conta e pelo tipo da receita")
-	public List<Receita> filtroPorContaTipoReceita(@PathVariable Long contaId, @PathVariable String tipoReceita) {
+	public List<ReceitaDTO> filtroPorContaTipoReceita(@PathVariable Long contaId, @PathVariable String tipoReceita) {
 		return service.filtroPorContaTipoReceita(contaId, tipoReceita);
 	}
 
@@ -75,7 +74,7 @@ public class ReceitaController {
 		return service.valorTotalReceitas();
 	}
 	
-	@GetMapping("{contaId}/valorTotalReceitas")
+	@GetMapping("/valorTotalReceitas/{contaId}")
 	@ApiOperation("Mostrar o valor total de todas as receitas pelo ID da conta")
 	public Optional<Double> valorTotalReceitaConta(@PathVariable Long contaId){
 		return service.valorTotalReceitaPorConta(contaId);

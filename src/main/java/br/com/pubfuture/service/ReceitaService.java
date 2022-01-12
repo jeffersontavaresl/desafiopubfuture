@@ -67,12 +67,14 @@ public class ReceitaService {
 	 * @param dataFinal
 	 * @return lista com todas as receitas pelo período que estejam na conta informada
 	 */
-	public List<Receita> filtroPorContaData(Long contaId, String dataInicial, String dataFinal) {
+	public List<ReceitaDTO> filtroPorContaData(Long contaId, String dataInicial, String dataFinal) {
 		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
 		List<Receita> receita = receitaRepository.findByContaIdAndDataRecebimentoBetween(contaId, dataIni, dataFim);
-		return receita;
+		return receita
+				.stream()
+				.map(r -> modelMapper.map(r, ReceitaDTO.class))
+				.collect(Collectors.toList());
 	}
 	
 	/** Método para filtrar as receitas pelo período de datas
@@ -81,12 +83,14 @@ public class ReceitaService {
 	 * @param dataFinal
 	 * @return lista com todas as receitas pelo período das datas informadas
 	 */
-	public List<Receita> filtroPorData(String dataInicial, String dataFinal){
+	public List<ReceitaDTO> filtroPorData(String dataInicial, String dataFinal){
 		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		
 		List<Receita> receita = receitaRepository.findByDataRecebimentoBetween(dataIni, dataFim);
-		return receita;
+		return receita
+				.stream()
+				.map(r -> modelMapper.map(r, ReceitaDTO.class))
+				.collect(Collectors.toList());
 	}
 
 	/** Método para filtrar as receitas pelo tipo da receita
@@ -94,11 +98,14 @@ public class ReceitaService {
 	 * @param tipoReceita
 	 * @return lista com todas as receitas de acordo com o tipo
 	 */
-	public List<Receita> filtroPorTipoReceita(String tipoReceita) {
+	public List<ReceitaDTO> filtroPorTipoReceita(String tipoReceita) {
 		tipoReceita = tipoReceita.toUpperCase();
 		TipoReceita tipo = TipoReceita.valueOf(tipoReceita);
 		List<Receita> receita = receitaRepository.findByTipoReceita(tipo);
-		return receita;
+		return receita
+				.stream()
+				.map(r -> modelMapper.map(r, ReceitaDTO.class))
+				.collect(Collectors.toList());
 	}
 
 	/** Método para filtrar as receitas por determinada conta e pelo tipo da receita
@@ -107,11 +114,14 @@ public class ReceitaService {
 	 * @param tipoReceita
 	 * @return lista com todas as receitas de acordo com o tipo e conta informada
 	 */
-	public List<Receita> filtroPorContaTipoReceita(Long contaId, String tipoReceita) {
+	public List<ReceitaDTO> filtroPorContaTipoReceita(Long contaId, String tipoReceita) {
 		tipoReceita = tipoReceita.toUpperCase();
 		TipoReceita tipo = TipoReceita.valueOf(tipoReceita);
 		List<Receita> receita = receitaRepository.findByContaIdAndTipoReceita(contaId, tipo);
-		return receita;
+		return receita
+				.stream()
+				.map(r -> modelMapper.map(r, ReceitaDTO.class))
+				.collect(Collectors.toList());
 	}
 
 	/** Método para visualizar o valor total das receitas
@@ -142,7 +152,6 @@ public class ReceitaService {
 	public ResponseEntity<ReceitaDTO> cadastrarReceita(@Valid ReceitaForm form, UriComponentsBuilder uriBuilder) {
 		Receita receita = form.converter(contaRepository);
 		receitaRepository.save(receita);
-
 		URI uri = uriBuilder.path("/receitas/{id}").buildAndExpand(receita.getId()).toUri();
 		return ResponseEntity.created(uri).body(new ReceitaDTO(receita));
 	}
@@ -155,7 +164,6 @@ public class ReceitaService {
 	 */
 	public ResponseEntity<ReceitaDTO> atualizarReceita(Long id, @Valid ReceitaForm form) {
 		Optional<Receita> optional = receitaRepository.findById(id);
-
 		if (optional.isPresent()) {
 			Receita receita = form.atualizar(id, receitaRepository);
 			receitaRepository.save(receita);
@@ -172,7 +180,6 @@ public class ReceitaService {
 	 */
 	public ResponseEntity<?> removerReceita(Long id) {
 		Optional<Receita> optional = receitaRepository.findById(id);
-
 		if (optional.isPresent()) {
 			receitaRepository.deleteById(id);
 			return ResponseEntity.ok().build();

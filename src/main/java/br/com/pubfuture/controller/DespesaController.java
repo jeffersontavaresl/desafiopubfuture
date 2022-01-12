@@ -19,7 +19,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.pubfuture.dto.DespesaDTO;
 import br.com.pubfuture.form.DespesaForm;
-import br.com.pubfuture.model.Despesa;
 import br.com.pubfuture.service.DespesaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,29 +43,29 @@ public class DespesaController {
 		return service.detalharDespesa(id);
 	}
 
-	@GetMapping("{contaId}/{dataInicial}/{dataFinal}")
+	@GetMapping("/data/{contaId}/{dataInicial}/{dataFinal}")
 	@ApiOperation("Filtrar despesas pelo ID da conta, data inicial e a data final")
-	public List<Despesa> filtroPorData(@PathVariable Long contaId, @PathVariable String dataInicial,
+	public List<DespesaDTO> filtroPorContaData(@PathVariable Long contaId, @PathVariable String dataInicial,
 			@PathVariable String dataFinal) {
 		return service.filtroPorContaData(contaId, dataInicial, dataFinal);
 	}
 	
 	@GetMapping("/data/{dataInicial}/{dataFinal}")
 	@ApiOperation("Filtrar despesas pelas datas")
-	public List<Despesa> filtroPorData(@PathVariable String dataInicial, @PathVariable String dataFinal){
+	public List<DespesaDTO> filtroPorData(@PathVariable String dataInicial, @PathVariable String dataFinal){
 		return service.filtroPorData(dataInicial, dataFinal);
 	}
 
 
-	@GetMapping("{contaId}/{tipoDespesa}")
+	@GetMapping("/tipoDespesa/{contaId}/{tipoDespesa}")
 	@ApiOperation("Filtrar despesas pelo ID da conta e pelo tipo da despesa")
-	public List<Despesa> filtroPorContaTipoDespesa(@PathVariable Long contaId, @PathVariable String tipoDespesa) {
+	public List<DespesaDTO> filtroPorContaTipoDespesa(@PathVariable Long contaId, @PathVariable String tipoDespesa) {
 		return service.filtroPorContaTipoDespesa(contaId, tipoDespesa);
 	}
 
-	@GetMapping("/tipo/{tipoDespesa}")
+	@GetMapping("/tipoDespesa/{tipoDespesa}")
 	@ApiOperation("Filtrar despesas pelo tipo da despesa")
-	public List<Despesa> filtroPorTipoDespesa(@PathVariable String tipoDespesa) {
+	public List<DespesaDTO> filtroPorTipoDespesa(@PathVariable String tipoDespesa) {
 		return service.filtroPorTipoDespesa(tipoDespesa);
 	}
 
@@ -76,7 +75,7 @@ public class DespesaController {
 		return service.valorTotalDespesas();
 	}
 	
-	@GetMapping("{contaId}/valorTotalDespesas")
+	@GetMapping("/valorTotalDespesas/{contaId}")
 	@ApiOperation("Mostrar o valor total de todas as despesas pelo ID da conta")
 	public Optional<Double> valorTotalDespesaConta(@PathVariable Long contaId){
 		return service.valorTotalReceitaPorConta(contaId);

@@ -67,12 +67,15 @@ public class DespesaService {
 	 * @param dataFinal
 	 * @return lista das despesas
 	 */
-	public List<Despesa> filtroPorContaData(Long contaId, String dataInicial, String dataFinal) {
+	public List<DespesaDTO> filtroPorContaData(Long contaId, String dataInicial, String dataFinal) {
 		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
 		List<Despesa> despesa = despesaRepository.findByContaIdAndDataPagamentoBetween(contaId, dataIni, dataFim);
-		return despesa;
+		return despesa
+				.stream()
+				.map(d -> modelMapper.map(d, DespesaDTO.class))
+				.collect(Collectors.toList());
 	}
 	
 	/** Método para filtrar todas as despesas em um período de datas
@@ -81,12 +84,15 @@ public class DespesaService {
 	 * @param dataFinal
 	 * @return lista das despesas
 	 */
-	public List<Despesa> filtroPorData(String dataInicial, String dataFinal){
+	public List<DespesaDTO> filtroPorData(String dataInicial, String dataFinal){
 		LocalDate dataIni = LocalDate.parse(dataInicial, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		LocalDate dataFim = LocalDate.parse(dataFinal, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 		
 		List<Despesa> despesa = despesaRepository.findByDataPagamentoBetween(dataIni, dataFim);
-		return despesa;
+		return despesa
+				.stream()
+				.map(d -> modelMapper.map(d, DespesaDTO.class))
+				.collect(Collectors.toList());
 	}
 	
 	/** Método para filtrar despesas pela conta e pelo tipo da despesa
@@ -95,11 +101,14 @@ public class DespesaService {
 	 * @param tipoDespesa
 	 * @return lista com as despesas
 	 */
-	public List<Despesa> filtroPorContaTipoDespesa(Long contaId, String tipoDespesa) {
+	public List<DespesaDTO> filtroPorContaTipoDespesa(Long contaId, String tipoDespesa) {
 		tipoDespesa = tipoDespesa.toUpperCase();
 		TipoDespesa tipo = TipoDespesa.valueOf(tipoDespesa);
 		List<Despesa> despesa = despesaRepository.findByContaIdAndTipoDespesa(contaId, tipo);
-		return despesa;
+		return despesa
+				.stream()
+				.map(d -> modelMapper.map(d, DespesaDTO.class))
+				.collect(Collectors.toList());
 	}
 
 	/** Método para filtrar despesas pelo tipo da despesa
@@ -107,11 +116,14 @@ public class DespesaService {
 	 * @param tipoDespesa
 	 * @return lista com as despesas
 	 */
-	public List<Despesa> filtroPorTipoDespesa(String tipoDespesa) {
+	public List<DespesaDTO> filtroPorTipoDespesa(String tipoDespesa) {
 		tipoDespesa = tipoDespesa.toUpperCase();
 		TipoDespesa tipo = TipoDespesa.valueOf(tipoDespesa);
 		List<Despesa> despesa = despesaRepository.findByTipoDespesa(tipo);
-		return despesa;
+		return despesa
+				.stream()
+				.map(d -> modelMapper.map(d, DespesaDTO.class))
+				.collect(Collectors.toList());
 	}
 
 	/** Método para visualizar o valor total de todas as despesas
