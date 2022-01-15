@@ -51,5 +51,28 @@ http://localhost:8080/swagger-ui.html#/<br>
  
  <h3>Programa em funcionamento</h3>
  
+<h4>Conta<h4>
+<img src="https://github.com/jeffersontavaresl/desafiopubfuture/blob/main/imagens/conta.png?raw=true">
  
+<h4>Lista de contas</h4>
+<img src="https://github.com/jeffersontavaresl/desafiopubfuture/blob/main/imagens/Contas%20-%20Lista.png?raw=true">
+	 
+<h4>Conta detalhada part.1</h4>
+<img src="https://github.com/jeffersontavaresl/desafiopubfuture/blob/main/imagens/Conta%20detalhada%20(1).png">
+<h4>Conta detalhada part.2</h4>	
+<img src="https://github.com/jeffersontavaresl/desafiopubfuture/blob/main/imagens/Conta%20detalhada%20(2).png">
+	
+<h4>Despesas</h4>
+<img src="https://github.com/jeffersontavaresl/desafiopubfuture/blob/main/imagens/despesas.png?raw=true">
+	
+<h4>Lista de despesa</h4>
+<img src="https://github.com/jeffersontavaresl/desafiopubfuture/blob/main/imagens/Despesa%20-%20lista.png">
+	
+<h4>Receitas</h4>
+<img src="https://github.com/jeffersontavaresl/desafiopubfuture/blob/main/imagens/receitas.png?raw=true">
+	
+ 
+<h4>Lista de receitas</h4>
+<img src="https://github.com/jeffersontavaresl/desafiopubfuture/blob/main/imagens/Receitas%20-%20Lista.png">
+
 
